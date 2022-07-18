@@ -18,3 +18,9 @@ services:
     tty: true
     ports:
       - "4000:4000"
+    networks:
+      - default
+      - shared-network
+networks:
+  shared-network:
+    external: true
