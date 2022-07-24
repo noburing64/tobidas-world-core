@@ -1,4 +1,5 @@
 import boto3
+import config
 
 # TODO: 削除予定
 def save(image, file_path: str, type="storage"):
@@ -7,15 +8,16 @@ def save(image, file_path: str, type="storage"):
             fp.write(image)
             
     def save_to_cloud(image, file_path):
-        # TODO: resourceを使う
-        # s3 = boto3.client('s3',
-        #     aws_access_key_id='',
-        #     aws_secret_access_key='',
-        #     region_name='ap-northeast-1'
-        # )
-        # waiter = s3.get_waiter('object_exists')
-        # waiter.wait(Bucket='test_bucket', Key='NewObject.txt')
-        pass
+        s3 = boto3.resource(
+            service_name='s3',
+            endpoint_url=config.AWS_S3_ENDPOINT_URL,
+            aws_access_key_id=config.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
+            region_name=config.AWS_S3_REGION_NAME
+        )
+        bucket = s3.Bucket("develop")
+        #bucket.Object(file_path).put(Body=image)
+        bucket.upload_file(image, file_path)
     
     if type == "s3":
         return save_to_cloud(image, file_path)
@@ -23,4 +25,13 @@ def save(image, file_path: str, type="storage"):
         return save_to_storage(image, file_path)
     
 def store(local_file_path: str, file_path: str, type="s3"):
-    pass
+    s3 = boto3.resource(
+        service_name='s3',
+        endpoint_url=config.AWS_S3_ENDPOINT_URL,
+        aws_access_key_id=config.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
+        region_name=config.AWS_S3_REGION_NAME
+    )
+    
+    bucket = s3.Bucket("develop")
+    bucket.upload_file(local_file_path, file_path)

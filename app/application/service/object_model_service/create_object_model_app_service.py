@@ -50,6 +50,7 @@ class CreateObjectModelAppService(AbsCreateObjectModelAppService):
         local_file_path = f"/app/storage/{dir_name}/output/reconstruction_sequential"
         file_path = f"{dir_name}/obj"
         file_size = self.__object_model_service.store(local_file_path, file_path)
+        self.__object_model_repository.CreateModelObjectFile(object_model_id, file_path, "model_data", file_size)
         self.__object_model_service.delete_local_files(f"/app/storage/{dir_name}")
         
         return {"msg": "ok", "file_size": file_size}
