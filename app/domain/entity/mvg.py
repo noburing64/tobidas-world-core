@@ -28,8 +28,8 @@ class Mvg:
             "-d", self.__camera_file_params,
             "-c", "3"
         ]
-        
-        subprocess.run(command)
+
+        subprocess.run(command, stdout=subprocess.DEVNULL)
         
     def ComputeFeatures(self):
         command = [
@@ -40,7 +40,7 @@ class Mvg:
             "-f", "1"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL)
         
     def ComputeMatches(self):
         command = [
@@ -51,7 +51,7 @@ class Mvg:
             "-n", "ANNL2"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL)
         
     def GeometricFilter(self, geo):
         command = [
@@ -62,38 +62,39 @@ class Mvg:
             "-o", self.__matches_dir + f"/matches.{geo}.bin"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL)
         
-    def StartSfm(self, engine="INCREMENTAL"):
-        if engine not in ["GLOBAL", "INCREMENTAL"]:
-            raise Exception
-        
+    def StartSfm(self, engine):
         command = [
             self.__getCommandPath("SfM"),
-            "--sfm_engine", engine,
+            "--sfm_engine", "GLOBAL" if engine == "global" else "INCREMENTAL",
             "--input_file", self.__matches_dir + "/sfm_data.json",
-            "--output_dir", self.__reconstruction_dir,
-            "--match_dir", self.__matches_dir + ("/matches.e.bin" if engine == "GLOBAL" else "")
+            "--output_dir",
+            self.__reconstruction_global_dir if engine == "global" else self.__reconstruction_dir,
+            "--match_file" if engine == "global" else "--match_dir",
+            self.__matches_dir + ("/matches.e.bin" if engine == "global" else "")
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL)
         
-    def ComputeSfmDataColor(self, dir_type="global"):
+    def ComputeSfmDataColor(self, dir_type=""):
         reconstruction_dir = self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir
         command = [
             self.__getCommandPath("ComputeSfM_DataColor"),
             "-i", reconstruction_dir + "/sfm_data.bin",
-            "-o", self.__reconstruction_dir + "/colorized.ply"
+            "-o", reconstruction_dir + "/colorized.ply"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL)
         
-    def ComputeStructureFromKnownPoses(self):
+    def ComputeStructureFromKnownPoses(self, dir_type=""):
         command = [
             self.__getCommandPath("ComputeStructureFromKnownPoses"),
-            "-i", self.__reconstruction_global_dir + "/sfm_data.bin",
+            "-i", 
+            (self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir)+ "/sfm_data.bin",
             "-m", self.__matches_dir,
-            "-o", self.__reconstruction_global_dir + "/robust.ply"
+            "-o",
+            (self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir)+ "/robust.ply"
         ]
-        
-        subprocess.run(command)
+
+        subprocess.run(command, stdout=subprocess.DEVNULL)

@@ -1,8 +1,7 @@
 from application.interactor.object_model_interactor.abs_create_object_model_interactor import AbsCreateObjectModelInteractor
+from presentation.request_param.interactor.object_model.create_object_model_param import CreateObjectModelParam as CreateObjectModelInteractorParam
 from flask import Blueprint, jsonify, request
 from injector import inject
-
-from application.service.object_model_service.abs_create_object_model_app_service import AbsCreateObjectModelAppService
 
 app = Blueprint('object_model_controller', __name__)
 
@@ -14,8 +13,8 @@ app = Blueprint('object_model_controller', __name__)
 def create_object_model(hash: str, create_app_interactor: AbsCreateObjectModelInteractor):
     # イメージの取得
     data = request.json
-    response = create_app_interactor.handle(data)
-    #response = create_app_service.handle(hash, data)
+    input = CreateObjectModelInteractorParam(hash, data["images"])
+    response = create_app_interactor.handle(input)
     
     return response
 

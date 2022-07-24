@@ -5,11 +5,12 @@ from domain.entity.mtl_material.ns import MtlMaterialNs
 from domain.entity.mtl_material.tr import MtlMaterialTr
 from domain.entity.mtl_material.ka import MtlMaterialKa
 from domain.entity.mtl_material.newmtl import MtlMaterialNewmtl
+from domain.entity.mtl_material.map_kd import MtlMaterialMapKd
 from domain.service.abs_mtl_material_service import AbsMtlMaterialService
 from domain.entity.mtl_material.mtl_material import MtlMaterial
 class MtlMaterialService(AbsMtlMaterialService):
     def getFilepath(self, dir_name: str) -> str:
-        return f"./storage/{dir_name}/output/reconstruction/model_data.mtl"
+        return f"./storage/{dir_name}/output/reconstruction_sequential/model_data.mtl"
     
     def load(self, file_path: str) -> MtlMaterial:
         with open(file_path) as fp:
@@ -23,6 +24,7 @@ class MtlMaterialService(AbsMtlMaterialService):
             tr: MtlMaterialTr
             illum: MtlMaterialIllum
             ns: MtlMaterialNs
+            map_kd: MtlMaterialMapKd
             
             
             
@@ -41,18 +43,11 @@ class MtlMaterialService(AbsMtlMaterialService):
                 elif kv[0].lower() == "illum":
                     illum = MtlMaterialIllum(line)
                 elif kv[0].lower() == "ns":
-                    ns = MtlMaterialIllum(line)
+                    ns = MtlMaterialNs(line)
+                elif kv[0].lower() == "map_kd":
+                    map_kd = MtlMaterialMapKd(line)
                     
-            data = {
-                "newmtl": newmtl,
-                "ka": ka,
-                "kd": kd,
-                "ks": ks,
-                "tr": tr,
-                "illum": illum,
-                "ns": ns
-            }
-            mtl_material = MtlMaterial(data)
+            mtl_material = MtlMaterial(newmtl, ka, kd, ks, tr, illum, ns, map_kd)
             mtl_material.modify()
             return mtl_material
     

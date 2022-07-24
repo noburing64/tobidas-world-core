@@ -14,5 +14,8 @@ class MtlMaterialKd:
         
     def getHeaderValues(self):
         return " ".join([
-            self.__header
-        ].extend(self.__values))
+            self.__header,
+            str(self.__values[0]),
+            str(self.__values[1]),
+            str(self.__values[2])
+        ])

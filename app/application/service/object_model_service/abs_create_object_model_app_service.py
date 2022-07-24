@@ -3,5 +3,5 @@ from presentation.request_param.object_model.create_object_model_param import Cr
 
 class AbsCreateObjectModelAppService(metaclass=ABCMeta):
     @abstractmethod
-    def handle(self, param: CreateObjectModelParam):
+    def handle(self, param: CreateObjectModelParam) -> dict:
         pass

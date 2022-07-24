@@ -3,6 +3,7 @@ FROM ubuntu:bionic
 # OpenMVGのインストール
 ENV PATH=$PATH:/opt/openMVG_Build/install/bin
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG="ja_JP.UTF-8"
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -21,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     g++-8 \
     libssl-dev \
     wget \
+    graphviz \
     libopencv-dev \
     libcgal-dev \
     libcgal-qt5-dev \
