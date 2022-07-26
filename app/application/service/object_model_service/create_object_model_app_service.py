@@ -3,6 +3,7 @@ from application.service.object_model_service.abs_create_object_model_app_servic
 from domain.service.abs_mvg_service import AbsMvgService
 from domain.service.abs_mvs_service import AbsMvsService
 from domain.service.abs_mtl_material_service import AbsMtlMaterialService
+from domain.service.abs_obj_file_service import AbsObjFileService
 from domain.service.abs_object_model_service import AbsObjectModelService
 from injector import inject
 from domain.repository.object_model_repository import AbsObjectModelRepository
@@ -16,12 +17,14 @@ class CreateObjectModelAppService(AbsCreateObjectModelAppService):
         mvg_service: AbsMvgService,
         mvs_service: AbsMvsService,
         mtl_material_service: AbsMtlMaterialService,
+        obj_file_service: AbsObjFileService,
         object_model_service: AbsObjectModelService
     ):
         self.__object_model_repository = object_model_repository
         self.__mvg_service = mvg_service
         self.__mvs_service = mvs_service
         self.__mtl_material_service = mtl_material_service
+        self.__obj_file_service = obj_file_service
         self.__object_model_service = object_model_service
         
     def handle(self, param: CreateObjectModelParam) -> dict:
@@ -40,6 +43,11 @@ class CreateObjectModelAppService(AbsCreateObjectModelAppService):
         if not os.path.exists(f"/app/storage/{dir_name}/output/reconstruction_sequential/model_data.obj"):
             return {"msg": "error"}
             #file_size = self.__get_model_object_size(dir_name, object_model_id)
+            
+        #OBJファイルの修正
+        obj_file_file_path = self.__obj_file_service.getFilepath(dir_name)
+        obj_file = self.__obj_file_service.load(obj_file_file_path)
+        self.__obj_file_service.save(obj_file, obj_file_file_path)
             
         # MTLファイルの修正
         mtl_material_file_path = self.__mtl_material_service.getFilepath(dir_name)
