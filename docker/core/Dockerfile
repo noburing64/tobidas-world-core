@@ -48,6 +48,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.0/cmake-3.20.0
     cd ../; \
     git clone https://github.com/openMVG/openMVG.git /opt/openMVG && \
     cd /opt/openMVG && git submodule update --init --recursive && \
+    sed -i -e 's/sOutImagesDir, view.second->s_Img_path/sOutDir, view.second->s_Img_path/' /opt/openMVG/src/software/SfM/export/main_openMVG2openMVS.cpp && \
     mkdir /opt/openMVG_Build; \
     cd /opt/openMVG_Build; \
     cmake -DCMAKE_BUILD_TYPE=RELEASE \
