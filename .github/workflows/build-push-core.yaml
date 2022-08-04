@@ -50,6 +50,6 @@ jobs:
           --project=kameds-f228e \
           --image=us-west1-docker.pkg.dev/kameds-f228e/test-repo/ss-core:develop \
           --port 4000 \
-          --region=us-west1 \
+          --region=us-central1 \
           --service-account=808305102318-compute@developer.gserviceaccount.com \
           --allow-unauthenticated
