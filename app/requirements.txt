@@ -7,3 +7,4 @@ boto3
 Pillow
 numpy
 numpy-quaternion
+google-cloud-storage
