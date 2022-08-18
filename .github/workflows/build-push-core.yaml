@@ -39,7 +39,7 @@ jobs:
         echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> app/.env
         echo "GCP_STORAGE_BUCKET_NAME=${{ secrets.GCP_STORAGE_BUCKET_NAME }}" >> app/.env
         echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > app/key.json
-        echo "nameserver 8.8.8.8" >> /etc/resolv.conf
+        sudo echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
     - name: Build
       run: |
