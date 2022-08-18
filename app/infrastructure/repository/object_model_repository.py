@@ -6,7 +6,7 @@ import config
 class ObjectModelRepository(AbsObjectModelRepository):
     def FindByHash(self, hash: str):
         # DEBUG
-        print(f"API_DOMAIN = config.API_DOMAIN")
+        print(f"API_DOMAIN = {config.API_DOMAIN}", flush=True)
         connection = http.client.HTTPConnection(config.API_DOMAIN)
         url = f"/api/v1/object_models/{hash}"
         header = {'content-type': 'application/json'}
