@@ -3,7 +3,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 
 dotenv_path=join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
+load_dotenv(dotenv_path, encoding='utf8')
 
 SECRET_KEY=os.environ.get("SECRET_KEY", "secret")
 API_DOMAIN=os.environ.get("API_DOMAIN", "api:8080")
@@ -14,3 +14,4 @@ AWS_SECRET_ACCESS_KEY=os.environ.get("AWS_SECRET_ACCESS_KEY", "")
 GCP_CREDENTIAL_KEY_PATH=os.environ.get("GCP_CREDENTIAL_KEY_PATH", "")
 GCP_PROJECT_NAME=os.environ.get("GCP_PROJECT_NAME", "")
 GCP_STORAGE_BUCKET_NAME=os.environ.get("GCP_STORAGE_BUCKET_NAME", "")
+STORAGE_EMULATOR_HOST=os.environ.get("STORAGE_EMULATOR_HOST", "")
