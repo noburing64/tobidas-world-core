@@ -2,6 +2,7 @@ import boto3
 import config
 from google.cloud import storage as gcs
 from google.oauth2 import service_account
+from google.auth.credentials import AnonymousCredentials
 
 # TODO: 削除予定
 def save(image, file_path: str, type="storage"):
@@ -18,8 +19,11 @@ def store(local_file_path: str, file_path: str, type="s3"):
         blob_gcs = bucket.blob(file_path)
         blob_gcs.upload_from_filename(local_file_path)
     else:
-        if config.GCP_STORAGE_HOST_NAME != '':
-            client = gcs.Client()
+        if config.STORAGE_EMULATOR_HOST != '':
+            client = gcs.Client(
+                credentials=AnonymousCredentials(),
+                project=config.GCP_PROJECT_NAME
+            )
             bucket = client.get_bucket(config.GCP_STORAGE_BUCKET_NAME)
             blob_gcs = bucket.blob(file_path)
             blob_gcs.upload_from_filename(local_file_path)
