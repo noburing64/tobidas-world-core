@@ -23,5 +23,7 @@ class ObjectModelRepository(AbsObjectModelRepository):
             "file_size": file_size
         }
         url = f"/api/v1/object_models/{object_model_id}/object_model_files"
+        print(url,flush=True)
+        print(f"{upload_data}",flush=True)
         return http_helper.request(config.API_DOMAIN, url, "POST", upload_data)
     
