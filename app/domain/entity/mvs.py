@@ -27,7 +27,7 @@ class Mvs:
             "-d", self.__image_dir
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command)
         
     def DensifyPointCloud(self):
         command = [
@@ -35,7 +35,7 @@ class Mvs:
             self.__reconstruction_dir + "/scene.mvs"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command)
         
     def ReconstructMesh(self):
         command = [
@@ -43,7 +43,7 @@ class Mvs:
             self.__reconstruction_dir + "/scene_dense.mvs"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command)
         
     def RefineMesh(self):
         command = [
@@ -54,7 +54,7 @@ class Mvs:
             "--resolution-level", "3"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command)
         
     def TextureMesh(self):
         command = [
@@ -64,4 +64,4 @@ class Mvs:
             "-o", self.__reconstruction_dir + "/model_data"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command)
