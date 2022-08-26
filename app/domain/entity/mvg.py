@@ -29,7 +29,7 @@ class Mvg:
             "-c", "3"
         ]
 
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
     def ComputeFeatures(self):
         command = [
@@ -40,7 +40,7 @@ class Mvg:
             "-f", "1"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
     def ComputeMatches(self):
         command = [
@@ -51,7 +51,7 @@ class Mvg:
             "-n", "ANNL2"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
     def GeometricFilter(self, geo):
         command = [
@@ -62,7 +62,7 @@ class Mvg:
             "-o", self.__matches_dir + f"/matches.{geo}.bin"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
     def StartSfm(self, engine):
         command = [
@@ -75,7 +75,7 @@ class Mvg:
             self.__matches_dir + ("/matches.e.bin" if engine == "global" else "")
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
     def ComputeSfmDataColor(self, dir_type=""):
         reconstruction_dir = self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir
@@ -85,7 +85,7 @@ class Mvg:
             "-o", reconstruction_dir + "/colorized.ply"
         ]
         
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
     def ComputeStructureFromKnownPoses(self, dir_type=""):
         command = [
@@ -97,4 +97,4 @@ class Mvg:
             (self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir)+ "/robust.ply"
         ]
 
-        subprocess.run(command)
+        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
