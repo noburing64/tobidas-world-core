@@ -1,27 +1,16 @@
 from domain.repository.camera_repository import AbsCameraRepository
-import http.client
-import json
+import domain.helper.http_helper as http_helper
 import config
+from urllib.parse import urlencode
 
 class CameraRepository(AbsCameraRepository):
     def FindAll(self):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            connection.request("GET", "/api/v1/cameras")
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+        return http_helper.request(config.API_DOMAIN, "/api/v1/cameras", "GET")
         
     def FindByModelName(self, model_name):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            connection.request("GET", f"/api/v1/cameras?model_name={model_name}")
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+        url = f"/api/v1/cameras?{urlencode({'model_name': model_name})}"
+        return http_helper.request(config.API_DOMAIN, url, "GET")
         
     def Create(self, model_name, focal_length):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            post_data = {"model_name": model_name, "focal_length": focal_length}
-            connection.request("POST", "/api/v1/cameras", json=post_data)
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+        post_data = {"model_name": model_name, "focal_length": focal_length}
+        return http_helper.request(config.API_DOMAIN, "/api/v1/cameras", "POST", post_data)

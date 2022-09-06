@@ -1,0 +1,4 @@
+./app/storage
+./app/.env-local
+./app/*.log
+./app/*.dmap

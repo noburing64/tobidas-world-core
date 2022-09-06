@@ -12,8 +12,8 @@ class MvsService(AbsMvsService):
         mvs = Mvs(
             "/opt/openMVG_Build/Linux-x86_64-RELEASE",
             "/openMVS_build/bin",
-            f"./storage/{dir_name}/output/reconstruction",
-            f"./storage/{dir_name}/input"
+            f"/app/storage/{dir_name}/output/reconstruction_sequential",
+            f"/app/storage/{dir_name}"
         )
         self.__exec_mvg(mvs, object_model_id)
         

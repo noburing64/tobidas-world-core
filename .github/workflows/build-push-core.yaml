@@ -1,0 +1,61 @@
+name: Build and Push Core Image
+
+on:
+  push:
+    branches:
+      - "develop"
+
+jobs:
+  build-and-publish:
+    name: Build and Push docker image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }}
+
+    - name: Setup Google Cloud
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Configure docker for artifact registry
+      run: |
+        gcloud auth configure-docker us-west1-docker.pkg.dev
+
+    - name: set TAG
+      run: |
+        echo "TAG=$(echo $GITHUB_REF | awk -F/ '{print $NF}')" >> $GITHUB_ENV
+
+    - name: set Environments
+      run: |
+        cp app/.env-local app/.env
+        echo "API_DOMAIN=${{ secrets.API_DOMAIN }}" >> app/.env
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> app/.env
+        echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> app/.env
+        echo "GCP_STORAGE_BUCKET_NAME=${{ secrets.GCP_STORAGE_BUCKET_NAME }}" >> app/.env
+        echo "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}" | base64 --decode > app/key.json
+
+    - name: Build
+      run: |
+        docker build -t us-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-repo/ss-core:develop -f deploy/core/Dockerfile .
+
+    - name: Push
+      run: |
+        docker push us-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-repo/ss-core:develop
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy ss-core \
+          --project=${{ secrets.GCP_PROJECT_ID }} \
+          --image=us-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/test-repo/ss-core:develop \
+          --port 4000 \
+          --region=us-central1 \
+          --service-account=808305102318-compute@developer.gserviceaccount.com \
+          --allow-unauthenticated \
+          --timeout=60m \
+          --memory 8G \
+          --cpu 4

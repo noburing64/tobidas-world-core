@@ -1,39 +1,29 @@
 from domain.repository.object_model_repository import AbsObjectModelRepository
-import http.client
-import json
+import domain.helper.http_helper as http_helper
 import config
 
-class ObjectModelRepository(AbsObjectModelRepository):
+class ObjectModelRepository(AbsObjectModelRepository):        
     def FindByHash(self, hash: str):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            connection.request("GET", f"/api/v1/object_models/{hash}")
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+        url = f"/api/v1/object_models/{hash}"
+        return http_helper.request(config.API_DOMAIN, url, "GET")
         
-    def UpdatePid(self, object_model_id, pid):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            connection.request("PATCH", f"/api/v1/object_models/{object_model_id}/pid", json={"pid": pid})
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+    def UpdatePid(self, object_model_id, pid):        
+        url = f"/api/v1/object_models/{object_model_id}/pid"
+        return http_helper.request(config.API_DOMAIN, url, "PATCH", {"pid": pid})
         
     def CreateProcessHistory(self, object_model_id, process_type_id):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            upload_data = {"process_type_id": process_type_id}
-            connection.request("PATCH", f"/api/v1/object_models/{object_model_id}/process_histories", json=upload_data)
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+        upload_data = {"process_type_id": process_type_id}
+        url = f"/api/v1/object_models/{object_model_id}/process_histories"
+        return http_helper.request(config.API_DOMAIN, url, "POST", upload_data)
         
     def CreateModelObjectFile(self, object_model_id, file_path, file_name, file_size):
-        with http.client.HTTPConnection(config.API_DOMAIN) as connection:
-            upload_data = {
-                "path": file_path,
-                "file_name": file_name,
-                "file_size": file_size
-            }
-            connection.request("POST", f"/api/v1/object_models/{object_model_id}/object_model_files", json=upload_data)
-            response = connection.getresponse().read()
-            data = json.load(response)
-            return data
+        upload_data = {
+            "path": file_path,
+            "file_name": file_name,
+            "file_size": file_size
+        }
+        url = f"/api/v1/object_models/{object_model_id}/object_model_files"
+        print(url,flush=True)
+        print(f"{upload_data}",flush=True)
+        return http_helper.request(config.API_DOMAIN, url, "POST", upload_data)
+    

@@ -15,7 +15,7 @@ class MtlMaterialKa:
     def getHeaderValues(self):
         return " ".join([
             self.__header,
-            round(self.__values[0], 6),
-            round(self.__values[1], 6),
-            round(self.__values[2], 6)
+            str(round(self.__values[0], 6)),
+            str(round(self.__values[1], 6)),
+            str(round(self.__values[2], 6))
         ])

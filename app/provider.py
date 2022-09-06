@@ -8,6 +8,8 @@ from domain.repository.camera_repository import AbsCameraRepository
 from domain.repository.object_model_repository import AbsObjectModelRepository
 from domain.service.abs_mtl_material_service import AbsMtlMaterialService
 from domain.service.mtl_material_service import MtlMaterialService
+from domain.service.abs_obj_file_service import AbsObjFileService
+from domain.service.obj_file_service import ObjFileService
 from domain.service.abs_mvg_service import AbsMvgService
 from domain.service.mvg_service import MvgService
 from domain.service.abs_mvs_service import AbsMvsService
@@ -26,6 +28,7 @@ class AppDIModule(Module):
         binder.bind(AbsCreateCameraAppService, to=CreateCameraAppService, scope=singleton)
         binder.bind(AbsCreateObjectModelInteractor, to=CreateObjectModelInteractor, scope=singleton)
         binder.bind(AbsMtlMaterialService, to=MtlMaterialService, scope=singleton)
+        binder.bind(AbsObjFileService, to=ObjFileService, scope=singleton)
         binder.bind(AbsMvgService, to=MvgService, scope=singleton)
         binder.bind(AbsMvsService, to=MvsService, scope=singleton)
         binder.bind(AbsObjectModelService, to=ObjectModelService, scope=singleton)

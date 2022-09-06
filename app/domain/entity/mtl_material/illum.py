@@ -4,7 +4,7 @@ class MtlMaterialIllum:
         if len(data) != 2:
             raise Exception
         if data[0].lower() != "illum":
-            raise Exception
+            raise Exception(data[0] + " is not illum")
         self.__header = "illum"
         value = int(data[1])
         if value not in [0, 1, 2]:

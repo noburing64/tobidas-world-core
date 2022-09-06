@@ -18,24 +18,25 @@ class MtlMaterial:
     __ns = None
     __map_kd = None
     
-    def __init__(self, **args):
-        for key in args.values():
-            if key == "newmtl":
-                self.__newmtl = args[key]
-            elif key == "ka":
-                self.__ka = args[key]
-            elif key == "kd":
-                self.__kd = args[key]
-            elif key == "ks":
-                self.__ks = args[key]
-            elif key == "tr":
-                self.__tr = args[key]
-            elif key == "illum":
-                self.__illum = args[key]
-            elif key == "ns":
-                self.__ns = args[key]
-            elif key == "map_kd":
-                self.__map_kd = args[key]
+    def __init__(
+        self,
+        newmtl: Optional[MtlMaterialNewmtl],
+        ka: Optional[MtlMaterialKa],
+        kd: Optional[MtlMaterialKd],
+        ks: Optional[MtlMaterialKs],
+        tr: Optional[MtlMaterialTr],
+        illum: Optional[MtlMaterialIllum],
+        ns: Optional[MtlMaterialNs],
+        map_kd: Optional[MtlMaterialMapKd]
+    ):
+        self.__newmtl = newmtl
+        self.__ka = ka
+        self.__kd = kd
+        self.__ks = ks
+        self.__tr = tr
+        self.__illum = illum
+        self.__ns = ns
+        self.__map_kd = map_kd
         
     def getNewmtl(self) -> Optional[MtlMaterialNewmtl]:
         return self.__newmtl

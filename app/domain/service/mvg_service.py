@@ -10,11 +10,11 @@ class MvgService(AbsMvgService):
         
     def handle(self, object_model_id, dir_name: str):
         mvg = Mvg(
-            f"./storage/{dir_name}/input",
+            f"/app/storage/{dir_name}/input",
             "/opt/openMVG_Build/Linux-x86_64-RELEASE",
-            f"./storage/{dir_name}/output/matches",
-            f"./storage/{dir_name}/output/reconstruction",
-            f"./storage/{dir_name}/output/reconstruction_global",
+            f"/app/storage/{dir_name}/output/matches",
+            f"/app/storage/{dir_name}/output/reconstruction_sequential",
+            f"/app/storage/{dir_name}/output/reconstruction_global",
             "/opt/openMVG/src/openMVG/exif/sensor_width_database/sensor_width_camera_database.txt"
         )
         self.__exec_mvg(mvg, object_model_id)
@@ -25,13 +25,13 @@ class MvgService(AbsMvgService):
             [mvg.ComputeFeatures, [], 2],
             [mvg.ComputeMatches, [], 3],
             [mvg.GeometricFilter, ["f"], 4],
-            [mvg.StartSfm, ["INCREMENTAL"], 5],
-            [mvg.ComputeSfmDataColor, [], 6],
+            [mvg.StartSfm, [""], 5],
+            [mvg.ComputeSfmDataColor, [""], 6],
             [mvg.ComputeStructureFromKnownPoses, [], 7],
             [mvg.GeometricFilter, ["e"], 8],
-            [mvg.StartSfm, ["GLOBAL"], 9],
+            [mvg.StartSfm, ["global"], 9],
             [mvg.ComputeSfmDataColor, ["global"], 10],
-            [mvg.ComputeStructureFromKnownPoses, [], 11]
+            [mvg.ComputeStructureFromKnownPoses, ["global"], 11]
         ]
         
         self.__exec_process_list(process_list, object_model_id)

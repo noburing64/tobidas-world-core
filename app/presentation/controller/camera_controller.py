@@ -20,7 +20,7 @@ def init():
     camera_database = CameraDatabase()
     camera_database.load()
     camera_database.getDataBase()
-    return "HOGE"
+    return "done"
 '''
 @app.route("/cameras/<int:camera_id>")
 

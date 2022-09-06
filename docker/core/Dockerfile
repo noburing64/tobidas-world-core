@@ -3,6 +3,7 @@ FROM ubuntu:bionic
 # OpenMVGのインストール
 ENV PATH=$PATH:/opt/openMVG_Build/install/bin
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG="ja_JP.UTF-8"
 
 RUN apt-get update && apt-get install -y \
     build-essential \
@@ -21,6 +22,7 @@ RUN apt-get update && apt-get install -y \
     g++-8 \
     libssl-dev \
     wget \
+    graphviz \
     libopencv-dev \
     libcgal-dev \
     libcgal-qt5-dev \
@@ -46,6 +48,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.0/cmake-3.20.0
     cd ../; \
     git clone https://github.com/openMVG/openMVG.git /opt/openMVG && \
     cd /opt/openMVG && git submodule update --init --recursive && \
+    sed -i -e 's/sOutImagesDir, view.second->s_Img_path/sOutDir, view.second->s_Img_path/' /opt/openMVG/src/software/SfM/export/main_openMVG2openMVS.cpp && \
     mkdir /opt/openMVG_Build; \
     cd /opt/openMVG_Build; \
     cmake -DCMAKE_BUILD_TYPE=RELEASE \
