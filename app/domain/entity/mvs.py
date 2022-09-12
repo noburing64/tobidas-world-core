@@ -19,7 +19,7 @@ class Mvs:
     def __getCommandBinPath(self, command: str):
         return self.__command_bin_dir + "/" + command
         
-    def OpenMVG2OpenMVS(self):
+    def OpenMVG2OpenMVS(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("openMVG2openMVS"),
             "-i", self.__reconstruction_dir + "/sfm_data.bin",
@@ -27,25 +27,25 @@ class Mvs:
             "-d", self.__image_dir
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def DensifyPointCloud(self):
+    def DensifyPointCloud(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandBinPath("DensifyPointCloud"),
             self.__reconstruction_dir + "/scene.mvs"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def ReconstructMesh(self):
+    def ReconstructMesh(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandBinPath("ReconstructMesh"),
             self.__reconstruction_dir + "/scene_dense.mvs"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def RefineMesh(self):
+    def RefineMesh(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandBinPath("RefineMesh"),
             self.__reconstruction_dir + "/scene_dense_mesh.mvs",
@@ -54,9 +54,9 @@ class Mvs:
             "--resolution-level", "3"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def TextureMesh(self):
+    def TextureMesh(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandBinPath("TextureMesh"),
             self.__reconstruction_dir + "/scene_dense_mesh_refine.mvs",
@@ -64,4 +64,4 @@ class Mvs:
             "-o", self.__reconstruction_dir + "/model_data"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

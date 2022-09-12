@@ -11,7 +11,7 @@ class CreateCameraAppService(AbsCreateCameraAppService):
     def handle(self, model_name: str, focal_length: float):
         camera = self.__camera_repository.FindByModelName(model_name)
         # 存在を確認する
-        if not camera:
+        if camera["message"]:
             # DB登録
             self.__camera_repository.Create(model_name, focal_length)
             # ローカル保存

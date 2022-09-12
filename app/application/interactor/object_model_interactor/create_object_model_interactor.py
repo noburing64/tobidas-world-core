@@ -69,8 +69,11 @@ class CreateObjectModelInteractor(AbsCreateObjectModelInteractor):
         pid = os.getpid()
         
         create_object_model_param = CreateObjectModelParam(object_model["id"], pid, dirname)
-        ret = self.__object_model_app_service.handle(create_object_model_param)
-        return make_response(jsonify(ret), 200)
+        try:
+            ret = self.__object_model_app_service.handle(create_object_model_param)
+            return make_response(jsonify(ret), 200)
+        except:
+            return make_response(jsonify({"message": "error"}), 400)
 
     
     def __is_all_model(self, exif_list):

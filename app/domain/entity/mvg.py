@@ -20,7 +20,7 @@ class Mvg:
     def __getCommandPath(self, command: str):
         return self.__command_dir + "/openMVG_main_" + command
         
-    def SfmInitImageListing(self):
+    def SfmInitImageListing(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("SfMInit_ImageListing"),
             "-i", self.__input_dir,
@@ -29,9 +29,9 @@ class Mvg:
             "-c", "3"
         ]
 
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def ComputeFeatures(self):
+    def ComputeFeatures(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("ComputeFeatures"),
             "-i", self.__matches_dir + "/sfm_data.json",
@@ -40,9 +40,9 @@ class Mvg:
             "-f", "1"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def ComputeMatches(self):
+    def ComputeMatches(self) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("ComputeMatches"),
             "-i", self.__matches_dir + "/sfm_data.json",
@@ -51,9 +51,9 @@ class Mvg:
             "-n", "ANNL2"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def GeometricFilter(self, geo):
+    def GeometricFilter(self, geo) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("GeometricFilter"),
             "-i", self.__matches_dir + "/sfm_data.json",
@@ -62,9 +62,9 @@ class Mvg:
             "-o", self.__matches_dir + f"/matches.{geo}.bin"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def StartSfm(self, engine):
+    def StartSfm(self, engine) -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("SfM"),
             "--sfm_engine", "GLOBAL" if engine == "global" else "INCREMENTAL",
@@ -75,9 +75,9 @@ class Mvg:
             self.__matches_dir + ("/matches.e.bin" if engine == "global" else "")
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def ComputeSfmDataColor(self, dir_type=""):
+    def ComputeSfmDataColor(self, dir_type="") -> subprocess.CompletedProcess:
         reconstruction_dir = self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir
         command = [
             self.__getCommandPath("ComputeSfM_DataColor"),
@@ -85,9 +85,9 @@ class Mvg:
             "-o", reconstruction_dir + "/colorized.ply"
         ]
         
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         
-    def ComputeStructureFromKnownPoses(self, dir_type=""):
+    def ComputeStructureFromKnownPoses(self, dir_type="") -> subprocess.CompletedProcess:
         command = [
             self.__getCommandPath("ComputeStructureFromKnownPoses"),
             "-i", 
@@ -97,4 +97,4 @@ class Mvg:
             (self.__reconstruction_global_dir if dir_type == "global" else self.__reconstruction_dir)+ "/robust.ply"
         ]
 
-        subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return subprocess.run(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
