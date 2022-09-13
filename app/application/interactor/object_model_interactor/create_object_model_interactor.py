@@ -58,9 +58,10 @@ class CreateObjectModelInteractor(AbsCreateObjectModelInteractor):
         
         # 存在しない場合は新規に登録する
         if not camera:
+            maker_name = exif[0][271]
             model_name = exif[0][272]
             focal_length = float(exif[0][37386])
-            self.__camera_app_service.handle(model_name, focal_length)
+            self.__camera_app_service.handle(maker_name, model_name, focal_length)
             
         # 二重登録防止
         if "process_histories" in object_model:

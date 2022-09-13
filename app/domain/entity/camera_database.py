@@ -14,9 +14,9 @@ class CameraDatabase():
     def getDataBase(self):
         return self.__data
     
-    def add(self, model_name: str, focal_length: float):
+    def add(self, maker_name, model_name: str, focal_length: float):
         with open(self.__database_path, "a") as fp:
-            fp.write(f'{model_name};{round(focal_length, 2)}\n')
+            fp.write(f'{maker_name} {model_name};{round(focal_length, 2)}\n')
             self.__data.append({"model": model_name, "focal_length": round(focal_length, 2)})
             
     def __parse(self, line):

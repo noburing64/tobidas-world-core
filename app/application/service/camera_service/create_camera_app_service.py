@@ -8,16 +8,16 @@ class CreateCameraAppService(AbsCreateCameraAppService):
     def __init__(self, camera_repository: AbsCameraRepository):
         self.__camera_repository = camera_repository
         
-    def handle(self, model_name: str, focal_length: float):
-        camera = self.__camera_repository.FindByModelName(model_name)
+    def handle(self, maker_name: str, model_name: str, focal_length: float):
+        camera = self.__camera_repository.FindByModelName(maker_name, model_name)
         # 存在を確認する
-        if camera["message"]:
+        if "message" in camera:
             # DB登録
-            self.__camera_repository.Create(model_name, focal_length)
+            self.__camera_repository.Create(maker_name, model_name, focal_length)
             # ローカル保存
             camera_database = CameraDatabase()
             camera_database.load()
-            camera_database.add(model_name, focal_length)
+            camera_database.add(maker_name, model_name, focal_length)
             
         
             
