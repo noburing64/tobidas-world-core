@@ -6,9 +6,9 @@ class AbsCameraRepository(metaclass=ABCMeta):
         pass
     
     @abstractmethod
-    def FindByModelName(self, model_name):
+    def FindByModelName(self, maker_name: str, model_name: str):
         pass
     
     @abstractmethod
-    def Create(self, model_name, focal_length):
+    def Create(self, maker_name, model_name, focal_length):
         pass

@@ -39,5 +39,10 @@ class MvgService(AbsMvgService):
     def __exec_process_list(self, process_list:list, object_model_id):
         for process in process_list:
             func, args, process_type_id = process
-            func(*args)
-            self.__object_model_repository.CreateProcessHistory(object_model_id, process_type_id)
+            ret = func(*args)
+            if ret.returncode == 0:
+                # 正常終了
+                self.__object_model_repository.CreateProcessHistory(object_model_id, process_type_id)
+            else:
+                # エラーが発生
+                raise Exception

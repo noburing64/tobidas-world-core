@@ -58,9 +58,10 @@ class CreateObjectModelInteractor(AbsCreateObjectModelInteractor):
         
         # 存在しない場合は新規に登録する
         if not camera:
+            maker_name = exif[0][271]
             model_name = exif[0][272]
             focal_length = float(exif[0][37386])
-            self.__camera_app_service.handle(model_name, focal_length)
+            self.__camera_app_service.handle(maker_name, model_name, focal_length)
             
         # 二重登録防止
         if "process_histories" in object_model:
@@ -69,8 +70,11 @@ class CreateObjectModelInteractor(AbsCreateObjectModelInteractor):
         pid = os.getpid()
         
         create_object_model_param = CreateObjectModelParam(object_model["id"], pid, dirname)
-        ret = self.__object_model_app_service.handle(create_object_model_param)
-        return make_response(jsonify(ret), 200)
+        try:
+            ret = self.__object_model_app_service.handle(create_object_model_param)
+            return make_response(jsonify(ret), 200)
+        except:
+            return make_response(jsonify({"message": "error"}), 400)
 
     
     def __is_all_model(self, exif_list):

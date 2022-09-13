@@ -38,35 +38,28 @@ class CreateObjectModelAppService(AbsCreateObjectModelAppService):
         self.__mvg_service.handle(object_model_id, dir_name)
         # MVSの実行
         self.__mvs_service.handle(object_model_id, dir_name)
-        print(f"/app/storage/{dir_name}/output/reconstruction_sequential/model_data.obj", flush=True)
         # オブジェクトが生成されているかを確認する
         if not os.path.exists(f"/app/storage/{dir_name}/output/reconstruction_sequential/model_data.obj"):
             print("doesn't exist", flush=True)
             return {"msg": "error"}
             #file_size = self.__get_model_object_size(dir_name, object_model_id)
             
-        print("obj", flush=True)
         #OBJファイルの修正
         obj_file_file_path = self.__obj_file_service.getFilepath(dir_name)
         obj_file = self.__obj_file_service.load(obj_file_file_path)
         self.__obj_file_service.save(obj_file, obj_file_file_path)
             
-        print("mtl", flush=True)
         # MTLファイルの修正
         mtl_material_file_path = self.__mtl_material_service.getFilepath(dir_name)
         mtl_material = self.__mtl_material_service.load(mtl_material_file_path)
         self.__mtl_material_service.save(mtl_material, mtl_material_file_path)
         
-        print("upload", flush=True)
         # ファイルの保存（アップロード）
         local_file_path = f"/app/storage/{dir_name}/output/reconstruction_sequential"
         file_path = f"{dir_name}/obj"
         file_size = self.__object_model_service.store(local_file_path, file_path)
-        print("create", flush=True)
         self.__object_model_repository.CreateModelObjectFile(object_model_id, file_path, "model_data", file_size)
-        print("files", flush=True)
         self.__object_model_service.delete_local_files(f"/app/storage/{dir_name}")
-        print("last", flush=True)
         
         return {"msg": "ok", "file_size": file_size}
     

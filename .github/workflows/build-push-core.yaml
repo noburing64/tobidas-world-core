@@ -57,5 +57,6 @@ jobs:
           --service-account=808305102318-compute@developer.gserviceaccount.com \
           --allow-unauthenticated \
           --timeout=60m \
-          --memory 8G \
-          --cpu 4
+          --memory 2G \
+          --cpu 2 \
+          --max-instances 4
